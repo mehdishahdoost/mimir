@@ -1,0 +1,26 @@
+{
+  "name": "mimir",
+  "version": "0.1.0",
+  "description": "Mimir AI Agent Harness - Terminal Interface",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "mimir": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.tsx",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["ai", "terminal", "cli", "agent"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "ink": "^7.1.1",
+    "react": "^19.2.7",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2"
+  }
+}
