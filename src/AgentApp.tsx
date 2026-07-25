@@ -10,6 +10,7 @@ import { SkillManager } from "./skills/manager.js";
 import { MCPManager } from "./mcp/manager.js";
 import { parseCommand } from "./commands/parser.js";
 import { executeCommand } from "./commands/handler.js";
+import type { CommandContext } from "./commands/registry.js";
 import { assemblePrompt } from "./agent/prompt.js";
 import { ConversationHistory } from "./agent/history.js";
 import { AgentLoop } from "./agent/loop.js";
@@ -56,6 +57,8 @@ export function AgentApp() {
       setCommandFeedback("Request cancelled.");
     }
   }, [agentLoop]);
+
+  const commandContext: CommandContext = { providers, skills, mcp };
 
   useInput((_input, key) => {
     if (key.escape && isLoading) {
@@ -148,7 +151,7 @@ export function AgentApp() {
             <MessageList messages={[{ role: "assistant", content: commandFeedback }]} />
           </Box>
         )}
-        <InputBox onSubmit={handleSubmit} />
+        <InputBox onSubmit={handleSubmit} commandContext={commandContext} />
         <ModeIndicator />
       </Box>
       <ShortcutBar />
