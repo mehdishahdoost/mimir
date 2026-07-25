@@ -43,8 +43,8 @@ function StaticApp() {
 // Check if we can run in interactive mode
 if (process.stdin?.isTTY) {
   // Dynamic import for interactive mode
-  import("./interactive.js").then(({ InteractiveApp }) => {
-    render(React.createElement(InteractiveApp));
+  import("./AgentApp.js").then(({ AgentApp }) => {
+    render(React.createElement(AgentApp));
   });
 } else {
   // Static preview mode
