@@ -151,10 +151,21 @@ function mcpHandler(
   return { message: `MCP Servers:\n${list}`, handled: true };
 }
 
+function connectHandler(
+  _args: string[],
+  _context: CommandContext
+): CommandResult {
+  return {
+    message: "__CONNECT_FLOW__",
+    handled: true,
+  };
+}
+
 registerCommand("help", helpHandler);
 registerCommand("model", modelHandler);
 registerCommand("skills", skillsHandler);
 registerCommand("mcp", mcpHandler);
+registerCommand("connect", connectHandler);
 
 export async function executeCommand(
   parsed: ParsedCommand,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Box, Text, useInput } from "ink";
+import { Box, Text, useInput, useWindowSize } from "ink";
 import { AutocompletePopup } from "./AutocompletePopup.js";
 import { getSuggestions, type Suggestion } from "../commands/suggestions.js";
 import type { CommandContext } from "../commands/registry.js";
@@ -10,9 +10,12 @@ const GRAY = "#6b6b6b";
 interface InputBoxProps {
   onSubmit: (value: string) => void;
   commandContext?: CommandContext;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
-export function InputBox({ onSubmit, commandContext }: InputBoxProps) {
+export function InputBox({ onSubmit, commandContext, placeholder, disabled }: InputBoxProps) {
+  const { columns } = useWindowSize();
   const [value, setValue] = useState("");
   const [cursorVisible, setCursorVisible] = useState(true);
   const [popupOpen, setPopupOpen] = useState(false);
@@ -57,6 +60,8 @@ export function InputBox({ onSubmit, commandContext }: InputBoxProps) {
   };
 
   useInput((input, key) => {
+    if (disabled) return;
+
     if (key.escape) {
       if (popupOpen) {
         setPopupOpen(false);
@@ -110,28 +115,53 @@ export function InputBox({ onSubmit, commandContext }: InputBoxProps) {
   });
 
   const hasValue = value.length > 0;
-  const placeholder = "Type your message... (type / for commands)";
+  const defaultPlaceholder = "Type your message... (type / for commands)";
+  const inputBoxWidth = Math.max(20, columns - 4);
+  const textViewportWidth = Math.max(8, inputBoxWidth - 6);
+  const visibleValue =
+    value.length > textViewportWidth
+      ? value.slice(value.length - textViewportWidth)
+      : value;
+  const visibleGhost = ghostText.slice(
+    0,
+    Math.max(0, textViewportWidth - visibleValue.length)
+  );
+  const visiblePlaceholder = (placeholder || defaultPlaceholder).slice(
+    0,
+    textViewportWidth
+  );
 
   return (
     <Box flexDirection="column" width="100%">
       <Box
         borderStyle="round"
-        borderColor={ORANGE}
+        borderColor={disabled ? GRAY : ORANGE}
         paddingX={1}
         paddingY={1}
         width="100%"
       >
         <Box>
-          <Text color={ORANGE}>▌</Text>
-          {hasValue ? (
+          <Text color={disabled ? GRAY : ORANGE}>▌</Text>
+          {disabled ? (
+            <Text color={GRAY} wrap="truncate-end">
+              {visiblePlaceholder}
+            </Text>
+          ) : hasValue ? (
             <>
-              <Text color="#e0e0e0">{value}</Text>
-              {ghostText && <Text color={GRAY}>{ghostText}</Text>}
+              <Text color="#e0e0e0" wrap="truncate-start">
+                {visibleValue}
+              </Text>
+              {visibleGhost && <Text color={GRAY}>{visibleGhost}</Text>}
               <Text>{cursorVisible ? " " : ""}</Text>
             </>
+          ) : placeholder ? (
+            <Text color={ORANGE} wrap="truncate-end">
+              {visiblePlaceholder}
+              {cursorVisible ? " " : ""}
+            </Text>
           ) : (
-            <Text color={GRAY}>
-              {placeholder}
+            <Text color={GRAY} wrap="truncate-end">
+              {visiblePlaceholder}
               {cursorVisible ? " " : ""}
             </Text>
           )}

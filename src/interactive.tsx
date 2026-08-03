@@ -20,7 +20,7 @@ export function InteractiveApp() {
       padding={2}
     >
       <AsciiTitle />
-      <Box width="100%" maxWidth={60} marginTop={2} flexDirection="column">
+      <Box width="100%" marginTop={2} flexDirection="column">
         <InputBox onSubmit={handleSubmit} />
         <ModeIndicator />
       </Box>

@@ -21,7 +21,6 @@ function StaticApp() {
       <AsciiTitle />
       <Box
         width="100%"
-        maxWidth={60}
         marginTop={2}
         flexDirection="column"
         borderStyle="round"

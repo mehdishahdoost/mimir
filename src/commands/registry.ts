@@ -51,4 +51,8 @@ export const commandRegistry: CommandMeta[] = [
     name: "mcp",
     description: "Show MCP server status",
   },
+  {
+    name: "connect",
+    description: "Install and configure MCP connectors",
+  },
 ];
